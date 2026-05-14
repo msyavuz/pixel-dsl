@@ -1,0 +1,23 @@
+{
+	"name": "@pixel-dsl/cli",
+	"version": "1.0.0",
+	"description": "Command-line interface for Pixel-DSL",
+	"type": "module",
+	"bin": {
+		"pixel-dsl": "src/index.ts"
+	},
+	"scripts": {
+		"dev": "tsx src/index.ts",
+		"test": "vitest",
+		"typecheck": "tsc -p tsconfig.json --noEmit",
+		"lint": "biome lint --write",
+		"format": "biome check --write"
+	},
+	"dependencies": {
+		"@pixel-dsl/core": "workspace:*",
+		"commander": "^14.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^25.7.0"
+	}
+}
