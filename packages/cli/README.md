@@ -48,20 +48,29 @@ pixel-dsl build hero.pix -o hero.png --scale 16 --watch
 
 This format is stable and safe to parse from scripts.
 
-## Claude Code skill
+## Agent skill
 
-The package bundles a [Claude Code](https://claude.com/claude-code) skill that
-teaches Claude the grammar, shape ops, and CLI so it can author sprites for you.
-Install it into `~/.claude/skills`:
+The package bundles a skill that teaches a coding agent the grammar, shape ops,
+and CLI so it can author sprites for you. Install it for a specific target:
 
 ```bash
-pixel-dsl skill install          # → ~/.claude/skills/pixel-dsl/SKILL.md
-pixel-dsl skill install --force  # overwrite an existing copy
-pixel-dsl skill install --dir ./.claude/skills   # project-local instead
-pixel-dsl skill print            # write the skill to stdout
+pixel-dsl skill install                  # claude  → ~/.claude/skills/pixel-dsl/SKILL.md
+pixel-dsl skill install agents           # agents  → ~/.codex/AGENTS.md (managed block)
+pixel-dsl skill install --force          # overwrite an existing Claude copy
+pixel-dsl skill install --dir ./.claude/skills   # project-local Claude install
+pixel-dsl skill install agents --dir .   # AGENTS.md in the current project
+pixel-dsl skill print [target]           # write the rendered skill to stdout
 ```
 
-Then ask Claude to "make a pixel-art sprite with pixel-dsl" and it'll use the skill.
+Targets:
+
+- **`claude`** ([Claude Code](https://claude.com/claude-code), default) — copies
+  `SKILL.md` (frontmatter + body); refuses to overwrite without `--force`.
+- **`agents`** ([AGENTS.md](https://agents.md), read by Codex and others) —
+  upserts a delimited, re-runnable managed block, leaving the rest of a shared
+  `AGENTS.md` untouched.
+
+Then ask your agent to "make a pixel-art sprite with pixel-dsl" and it'll use the skill.
 
 ## License
 
