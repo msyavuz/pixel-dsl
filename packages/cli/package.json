@@ -1,6 +1,6 @@
 {
 	"name": "@pixel-dsl/cli",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Command-line interface for Pixel-DSL — compile .pix sources to PNG sprites.",
 	"keywords": [
 		"pixel-art",
