@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / usage help
+    url: https://github.com/msyavuz/pixel-dsl/discussions
+    about: For questions about using Pixel-DSL, start a discussion.
+  - name: Documentation
+    url: https://pixel-dsl.com
+    about: Grammar reference, shape-op guide, and CLI usage.

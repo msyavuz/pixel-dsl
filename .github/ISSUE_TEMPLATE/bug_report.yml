@@ -1,0 +1,70 @@
+name: Bug report
+description: Something compiles wrong, crashes, or produces unexpected pixels.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. A **minimal `.pix` source** that reproduces the
+        problem is the single most useful thing you can include.
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Minimal .pix source
+      description: The smallest sprite that reproduces the issue.
+      render: pix
+      placeholder: |
+        palette p { black k #000000 }
+        sprite bug 4x4 palette=p { fill k }
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen (output, error, etc.).
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened. Paste any error/diagnostic verbatim, and attach the rendered PNG if relevant.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which package?
+      multiple: true
+      options:
+        - core (parser/renderer)
+        - cli
+        - lsp
+        - docs
+        - playground
+        - not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "Output of `pixel-dsl --version`, or the package version / commit SHA."
+      placeholder: "e.g. 0.1.0 or commit abc1234"
+    validations:
+      required: true
+
+  - type: input
+    id: env
+    attributes:
+      label: Environment
+      description: OS and Node version (`node --version`). Note if it's the browser playground instead.
+      placeholder: "e.g. Linux, Node 22.19.0"
+    validations:
+      required: false
