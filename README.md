@@ -1,6 +1,12 @@
-# Pixel-DSL
+<p align="center">
+  <img src="docs/public/logo.png" alt="Pixel-DSL logo" width="128" height="128" style="image-rendering: pixelated;">
+</p>
+
+<h1 align="center">Pixel-DSL</h1>
 
 A deterministic, LLM-friendly domain-specific language for pixel-art sprites. The same source always compiles to byte-identical PNG output, and the grammar is small enough to drop into an LLM system prompt.
+
+> The logo itself is a Pixel-DSL sprite — see [`examples/logo.pix`](examples/logo.pix).
 
 ```pix
 palette nes {

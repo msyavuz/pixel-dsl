@@ -3,6 +3,9 @@ layout: home
 hero:
   name: "Pixel-DSL"
   tagline: "A deterministic, LLM-friendly DSL for pixel art sprites."
+  image:
+    src: /logo.png
+    alt: Pixel-DSL logo
   actions:
     - theme: brand
       text: Get started

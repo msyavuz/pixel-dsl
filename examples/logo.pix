@@ -1,0 +1,34 @@
+// Pixel-DSL logo — a rounded badge with a bold "P" monogram and a
+// single lit "pixel" in the corner, nodding to the language's purpose.
+palette logo {
+  edge   e #2f209c   // outline
+  brand  b #6c4cf0   // badge face
+  hi     h #8b73ff   // top-left highlight
+  light  l #f5f3ff   // letterform
+  accent a #38e0c8   // signature pixel
+}
+
+sprite logo 16x16 palette=logo {
+  fill .
+
+  // badge face + 1px outline
+  rect 1,1 14,14 e      // outline base
+  rect 2,2 13,13 b      // face
+  // top + left inner highlight bevel
+  rect 2,2 13,2 h
+  rect 2,2 2,13 h
+  // rounded corners (clip outline to soften the square)
+  pixel 1,1 .
+  pixel 14,1 .
+  pixel 1,14 .
+  pixel 14,14 .
+
+  // "P" monogram (light)
+  rect 5,4 6,12 l       // stem
+  rect 7,4 10,5 l       // bowl top
+  rect 9,5 10,7 l       // bowl right
+  rect 7,7 10,8 l       // bowl bottom
+
+  // accent — the single lit cell
+  rect 11,11 12,12 a
+}

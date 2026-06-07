@@ -1,0 +1,6 @@
+/* Render the pixel-art logo crisply instead of smooth-scaled.
+   .VPImage backs both the hero image and the nav-bar logo. */
+.VPImage,
+img.VPImage {
+	image-rendering: pixelated;
+}

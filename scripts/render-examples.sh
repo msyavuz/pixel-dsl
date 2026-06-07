@@ -34,3 +34,10 @@ for entry in "${renders[@]}"; do
   pixel-dsl build "examples/${name}.pix" -o "${out}/${name}.png" -s "${scale}"
   echo "rendered ${name} (scale ${scale}) -> ${out}/${name}.png"
 done
+
+# Project logo (used by the docs favicon/nav/hero, the README, and the
+# playground favicon) — also a Pixel-DSL sprite, rendered from examples/logo.pix.
+pixel-dsl build examples/logo.pix -o docs/public/logo.png -s 16
+pixel-dsl build examples/logo.pix -o docs/public/favicon.png -s 2
+cp docs/public/logo.png apps/playground/public/logo.png
+echo "rendered logo -> docs/public/{logo,favicon}.png + apps/playground/public/logo.png"
