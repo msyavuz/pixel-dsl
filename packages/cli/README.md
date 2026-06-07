@@ -48,6 +48,21 @@ pixel-dsl build hero.pix -o hero.png --scale 16 --watch
 
 This format is stable and safe to parse from scripts.
 
+## Claude Code skill
+
+The package bundles a [Claude Code](https://claude.com/claude-code) skill that
+teaches Claude the grammar, shape ops, and CLI so it can author sprites for you.
+Install it into `~/.claude/skills`:
+
+```bash
+pixel-dsl skill install          # → ~/.claude/skills/pixel-dsl/SKILL.md
+pixel-dsl skill install --force  # overwrite an existing copy
+pixel-dsl skill install --dir ./.claude/skills   # project-local instead
+pixel-dsl skill print            # write the skill to stdout
+```
+
+Then ask Claude to "make a pixel-art sprite with pixel-dsl" and it'll use the skill.
+
 ## License
 
 ISC

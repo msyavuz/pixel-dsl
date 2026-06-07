@@ -46,6 +46,14 @@ npm install -g @pixel-dsl/cli
 pixel-dsl build hero.pix -o hero.png --scale 16
 ```
 
+### Use with Claude Code
+
+The CLI bundles a [Claude Code](https://claude.com/claude-code) skill so Claude can author `.pix` sprites for you. Install it once:
+
+```bash
+pixel-dsl skill install   # → ~/.claude/skills/pixel-dsl/SKILL.md
+```
+
 Or use the renderer programmatically:
 
 ```bash

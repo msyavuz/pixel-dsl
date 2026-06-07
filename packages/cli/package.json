@@ -29,7 +29,8 @@
 		"pixel-dsl": "./dist/index.js"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"skill"
 	],
 	"scripts": {
 		"build": "tsc -b && chmod +x dist/index.js",

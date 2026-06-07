@@ -2,6 +2,7 @@
 import { readFileSync, watch } from "node:fs";
 import { Command } from "commander";
 import { type BuildArgs, runBuild } from "./build.js";
+import { defaultSkillsDir, installSkill, readBundledSkill } from "./skill.js";
 
 const pkg = JSON.parse(
 	readFileSync(new URL("../package.json", import.meta.url), "utf8"),
@@ -53,6 +54,38 @@ program
 			process.exit(ok ? 0 : 1);
 		},
 	);
+
+const skill = program
+	.command("skill")
+	.description("Manage the Pixel-DSL skill for Claude Code.");
+
+skill
+	.command("install")
+	.description("Install the Pixel-DSL skill so Claude Code can author sprites.")
+	.option(
+		"--dir <path>",
+		`skills directory to install into (default: ${defaultSkillsDir()})`,
+	)
+	.option("-f, --force", "overwrite an existing install")
+	.action((opts: { dir?: string; force?: boolean }) => {
+		const res = installSkill({ dir: opts.dir, force: opts.force });
+		if (!res.installed && res.reason === "exists") {
+			process.stderr.write(
+				`pixel-dsl: skill already installed at ${res.dest} (use --force to overwrite)\n`,
+			);
+			process.exit(0);
+		}
+		process.stdout.write(`pixel-dsl: installed skill -> ${res.dest}\n`);
+		process.exit(0);
+	});
+
+skill
+	.command("print")
+	.description("Print the bundled skill to stdout.")
+	.action(() => {
+		process.stdout.write(readBundledSkill());
+		process.exit(0);
+	});
 
 function runWatch(args: BuildArgs): void {
 	const rebuild = () => {
