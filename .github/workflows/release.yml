@@ -2,16 +2,18 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    branches: [main]
+
+# Only one release run at a time so the version PR / publish don't race.
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     permissions:
-      # Required for npm Trusted Publishing (OIDC) — no long-lived token needed.
-      id-token: write
-      contents: read
+      contents: write # push the "Version Packages" PR branch + create tags/releases
+      pull-requests: write # open/update the version PR
+      id-token: write # npm Trusted Publishing (OIDC) — no long-lived token
     steps:
       - uses: actions/checkout@v4
 
@@ -34,11 +36,15 @@ jobs:
       - name: Test
         run: pnpm -r test run
 
-      - name: Build
-        run: pnpm -r build
-
-      # Auth comes from GitHub's OIDC token, exchanged for a short-lived npm
-      # token. Configure each package's Trusted Publisher on npm to point at
-      # this repo + this workflow file (release.yml) before the first OIDC run.
-      - name: Publish to npm
-        run: pnpm -r publish --access public --no-git-checks
+      # When changesets are pending, this opens/updates a "Version Packages" PR
+      # that bumps versions + writes changelogs. When that PR is merged (no
+      # pending changesets), it runs `release` to build and publish to npm.
+      # Configure each public package's Trusted Publisher on npm to point at
+      # this repo + workflow (release.yml) before the first OIDC publish.
+      - name: Create release PR or publish
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

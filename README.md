@@ -83,6 +83,18 @@ pnpm dev:playground   # local playground
 pnpm dev:docs         # local docs site
 ```
 
+### Releasing
+
+Versioning and changelogs are managed with [Changesets](https://github.com/changesets/changesets) (independent per-package SemVer).
+
+- **In a PR that changes a published package** (`core`, `cli`, `lsp`), add a changeset:
+  ```bash
+  pnpm changeset        # pick packages + bump type, write a summary
+  ```
+  Commit the generated `.changeset/*.md` file with your PR. Docs/infra-only PRs don't need one.
+- **On merge to `main`**, the Release workflow opens a "Version Packages" PR that bumps versions and writes per-package `CHANGELOG.md`s.
+- **Merging that PR** publishes the changed packages to npm (Trusted Publishing via OIDC) and tags the release.
+
 ## Documentation
 
 Full grammar, shape-op reference, and CLI usage live in the [docs](docs/). See [`docs/guide/grammar.md`](docs/guide/grammar.md) for the complete language surface.
