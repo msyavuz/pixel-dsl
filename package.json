@@ -20,7 +20,10 @@
 		"format": "pnpm -r format",
 		"lint": "pnpm -r lint",
 		"dev:playground": "pnpm --filter @pixel-dsl/playground dev",
-		"dev:docs": "pnpm --filter @pixel-dsl/docs dev"
+		"dev:docs": "pnpm --filter @pixel-dsl/docs dev",
+		"render:assets": "bash scripts/render-examples.sh",
+		"sync:branding": "bash scripts/sync-branding.sh",
+		"dev:vscode": "pnpm --filter @pixel-dsl/vscode... build"
 	},
 	"keywords": [],
 	"license": "ISC",
