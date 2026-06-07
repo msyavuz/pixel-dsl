@@ -12,6 +12,7 @@ import {
 	computeCompletions,
 	computeDiagnostics,
 	computeHover,
+	formatDocument,
 } from "./features.js";
 
 const connection = createConnection(ProposedFeatures.all);
@@ -22,6 +23,7 @@ connection.onInitialize(() => ({
 		textDocumentSync: TextDocumentSyncKind.Incremental,
 		hoverProvider: true,
 		completionProvider: { resolveProvider: false },
+		documentFormattingProvider: true,
 	},
 }));
 
@@ -38,6 +40,11 @@ documents.onDidChangeContent((e) => validate(e.document));
 connection.onHover((params) => {
 	const doc = documents.get(params.textDocument.uri);
 	return doc ? computeHover(doc.getText(), params.position) : null;
+});
+
+connection.onDocumentFormatting((params) => {
+	const doc = documents.get(params.textDocument.uri);
+	return doc ? (formatDocument(doc.getText()) ?? []) : [];
 });
 
 connection.onCompletion((params) => {

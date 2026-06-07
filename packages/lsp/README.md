@@ -5,6 +5,7 @@ Language server for [Pixel-DSL](https://github.com/msyavuz/pixel-dsl). It reuses
 - **Diagnostics** — parse, lex, and semantic (render-time) errors as you type, with `line:col` ranges and hints. Catches unknown palette shorts, cell-count mismatches, bad `flip` axes, and more.
 - **Hover** — documentation for keywords and shape ops (`palette`, `sprite`, `fill`, `rect`, `pixel`, `line`, `circle`, `flip`).
 - **Completion** — op keywords plus the palette shorts declared in the current document.
+- **Format** — full-document format via `@pixel-dsl/core` `formatSource` (preserves `//` comments).
 
 ## Install
 

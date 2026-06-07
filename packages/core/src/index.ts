@@ -36,6 +36,7 @@ export function parse(source: string): {
 
 export type * from "./ast.js";
 export type { Diagnostic } from "./errors.js";
+export { formatSource } from "./format-source.js";
 export {
 	parseHex,
 	type ResolvedPalette,

@@ -1,5 +1,6 @@
 import {
 	type Diagnostic as CoreDiagnostic,
+	formatSource,
 	parse,
 	RenderError,
 	renderPixels,
@@ -12,6 +13,7 @@ import {
 	type Hover,
 	type Position,
 	type Range,
+	type TextEdit,
 } from "vscode-languageserver";
 
 /** Markdown docs for every keyword, shown on hover and in completion. */
@@ -156,4 +158,22 @@ export function computeCompletions(
 		});
 	}
 	return items;
+}
+
+/** Full-document format via @pixel-dsl/core formatSource. */
+export function formatDocument(text: string): TextEdit[] | null {
+	const formatted = formatSource(text);
+	if (formatted === null || formatted === text) return null;
+	const lines = text.split(/\r?\n/);
+	const endLine = Math.max(0, lines.length - 1);
+	const endChar = lines[endLine]?.length ?? 0;
+	return [
+		{
+			range: {
+				start: { line: 0, character: 0 },
+				end: { line: endLine, character: endChar },
+			},
+			newText: formatted,
+		},
+	];
 }
