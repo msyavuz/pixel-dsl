@@ -11,11 +11,25 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # push the "Version Packages" PR branch + create tags/releases
-      pull-requests: write # open/update the version PR
+      contents: read
       id-token: write # npm Trusted Publishing (OIDC) — no long-lived token
     steps:
+      # Mint a short-lived token from the release GitHub App so the "Version
+      # Packages" PR is authored by the App (not GITHUB_TOKEN). PRs opened with
+      # GITHUB_TOKEN do not trigger workflows, so required checks (e.g. `build`)
+      # would never run on them; an App token fixes that.
+      # Requires repo secrets APP_ID and APP_PRIVATE_KEY (see the App with
+      # Contents: read/write + Pull requests: read/write installed on this repo).
+      - name: Generate release-bot token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -46,5 +60,7 @@ jobs:
         with:
           version: pnpm version-packages
           publish: pnpm release
+          title: "chore: version packages"
+          commit: "chore: version packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
