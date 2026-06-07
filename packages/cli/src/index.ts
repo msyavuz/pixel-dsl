@@ -2,7 +2,12 @@
 import { readFileSync, watch } from "node:fs";
 import { Command } from "commander";
 import { type BuildArgs, runBuild } from "./build.js";
-import { defaultSkillsDir, installSkill, readBundledSkill } from "./skill.js";
+import {
+	installSkill,
+	readBundledSkill,
+	resolveTarget,
+	TARGETS,
+} from "./skill.js";
 
 const pkg = JSON.parse(
 	readFileSync(new URL("../package.json", import.meta.url), "utf8"),
@@ -55,35 +60,66 @@ program
 		},
 	);
 
+const targetList = Object.values(TARGETS)
+	.map((t) => `${t.id} (${t.label})`)
+	.join(", ");
+
 const skill = program
 	.command("skill")
-	.description("Manage the Pixel-DSL skill for Claude Code.");
+	.description("Manage the Pixel-DSL skill for coding agents.");
 
 skill
 	.command("install")
-	.description("Install the Pixel-DSL skill so Claude Code can author sprites.")
+	.description(
+		"Install the Pixel-DSL skill so a coding agent can author sprites.",
+	)
+	.argument("[target]", `agentic tool to install for: ${targetList}`, "claude")
 	.option(
 		"--dir <path>",
-		`skills directory to install into (default: ${defaultSkillsDir()})`,
+		"base directory to install into (default: the target's home location)",
 	)
-	.option("-f, --force", "overwrite an existing install")
-	.action((opts: { dir?: string; force?: boolean }) => {
-		const res = installSkill({ dir: opts.dir, force: opts.force });
+	.option(
+		"-f, --force",
+		"overwrite an existing install (file-mode targets only)",
+	)
+	.action((targetId: string, opts: { dir?: string; force?: boolean }) => {
+		const target = resolveTarget(targetId);
+		if (!target) {
+			process.stderr.write(
+				`pixel-dsl: unknown target '${targetId}' (expected one of: ${Object.keys(TARGETS).join(", ")})\n`,
+			);
+			process.exit(2);
+		}
+		const res = installSkill({
+			target: target.id,
+			dir: opts.dir,
+			force: opts.force,
+		});
 		if (!res.installed && res.reason === "exists") {
 			process.stderr.write(
 				`pixel-dsl: skill already installed at ${res.dest} (use --force to overwrite)\n`,
 			);
 			process.exit(0);
 		}
-		process.stdout.write(`pixel-dsl: installed skill -> ${res.dest}\n`);
+		process.stdout.write(
+			`pixel-dsl: ${res.action} ${target.label} skill -> ${res.dest}\n`,
+		);
 		process.exit(0);
 	});
 
 skill
 	.command("print")
-	.description("Print the bundled skill to stdout.")
-	.action(() => {
-		process.stdout.write(readBundledSkill());
+	.description("Print the bundled skill (rendered for a target) to stdout.")
+	.argument("[target]", `target to render for: ${targetList}`, "claude")
+	.action((targetId: string) => {
+		const target = resolveTarget(targetId);
+		if (!target) {
+			process.stderr.write(
+				`pixel-dsl: unknown target '${targetId}' (expected one of: ${Object.keys(TARGETS).join(", ")})\n`,
+			);
+			process.exit(2);
+		}
+		process.stdout.write(target.render(readBundledSkill()));
 		process.exit(0);
 	});
 

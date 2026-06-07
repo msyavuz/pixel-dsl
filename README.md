@@ -46,13 +46,17 @@ npm install -g @pixel-dsl/cli
 pixel-dsl build hero.pix -o hero.png --scale 16
 ```
 
-### Use with Claude Code
+### Use with a coding agent
 
-The CLI bundles a [Claude Code](https://claude.com/claude-code) skill so Claude can author `.pix` sprites for you. Install it once:
+The CLI bundles a skill that teaches a coding agent the grammar, shape ops, and CLI so it can author `.pix` sprites for you. Install it for your tool of choice:
 
 ```bash
-pixel-dsl skill install   # → ~/.claude/skills/pixel-dsl/SKILL.md
+pixel-dsl skill install            # Claude Code → ~/.claude/skills/pixel-dsl/SKILL.md
+pixel-dsl skill install agents     # AGENTS.md   → ~/.codex/AGENTS.md (managed block)
+pixel-dsl skill install agents --dir .   # AGENTS.md in the current project instead
 ```
+
+The `agents` target merges a delimited, re-runnable block into AGENTS.md, so it won't clobber existing content. AGENTS.md is read by Codex and a growing set of agentic tools.
 
 Or use the renderer programmatically:
 
